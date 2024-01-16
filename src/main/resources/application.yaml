@@ -1,0 +1,6 @@
+
+
+spring:
+    devtools:
+        liverelaod: 
+            enabled: true

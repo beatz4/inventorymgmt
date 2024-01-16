@@ -1,15 +1,71 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta charset="UTF-8">
-        <title>Inventory Management</title>
-    </head>
-    <body>
-        <div class="container_header">
-            <h2>Thymeleaf Template Sample</h2>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- css -->
+    <link th:href="@{/css/main.css}" rel="stylesheet" />
+
+    <!-- js -->
+    <script type="text/javascript" th:src="@{/lib/jquery-3.7.1.min.js}"></script>
+    <script type="text/javascript" th:src="@{/lib/fontawesome.min.js}"></script>
+    
+    <title>Inventory Management</title>
+</head>
+<body>
+
+    <div class="main_header">
+        <nav class="navbar">
+
+        <div class="navbar__logo">
+            <i class="fas fa-blog"></i>
+            <a href="">Inventory System</a>
         </div>
-        <div class="container_context">
-            <div id="grid"></div>
-        </div>
-    </body>
+
+        <ul class="navbar__menu">
+            <li><a href="javascript:void(0);" onclick="moveMainPage()">Home</a></li>
+            <li><a href="javascript:void(0);" onclick="movePage('companymgmt')">업체관리</a></li>
+            <li><a href="javascript:void(0);" onclick="movePage('inventorymgmt')">재고관리</a></li>
+            <li><a href="javascript:void(0);" onclick="movePage('ordermgmt')">주문관리</a></li>
+        </ul>
+
+        <ul class="navbar__icons">
+            <li><i class="fab fa-google"></i></li>
+            <li><i class="fab fa-slack"></i></li>
+        </ul>
+        
+        <a href="#" class="navbar__toggleBtn">
+            <i class="fas fa-hamburger"></i>
+        </a>
+
+        </nav>
+    </div>
+
+    <!-- width: 80%;  -->
+    <div class="main_content">
+        
+        <iframe 
+            title="main" id="iframe" name="img" 
+            src="https://images.unsplash.com/photo-1705046332420-abc89468ef92?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+            style="overflow-y:hidden;">
+        </iframe>
+    </div>
+
+</body>
 </html>
+
+<script>
+
+    function moveMainPage() {
+        document.getElementById("iframe").src = "https://images.unsplash.com/photo-1705046332420-abc89468ef92?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+    }
+
+    function movePage(url) {
+        document.getElementById("iframe").src = url;
+    }
+
+    $(function() {
+
+    });
+
+</script>
