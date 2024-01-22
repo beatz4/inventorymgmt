@@ -57,12 +57,12 @@ a {
 
 .main_content {
     position: relative;
-    width: 100%;
+    width: 100vw;
     padding-bottom: 44.7%;
 }
 
 .main_content iframe {
     position: absolute;
-    width: 100%;
+    width: 100vw;
     height: 100%;
 }
