@@ -7,6 +7,7 @@
     <link th:href="@{/lib/tui-grid.css}" rel="stylesheet" />
     <link th:href="@{/lib/bootstrap-styles.css}" rel="stylesheet" />
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <link th:href="@{/css/layout.css}" rel="stylesheet" />
 
     <!-- js -->
     <script type="text/javascript" th:src="@{/lib/tui-grid.js}"></script>
@@ -56,12 +57,12 @@
                     <!-- 기간 검색 -->
                     <div class="col-lg-2">
                         <label class="fs-6 form-label fw-bold text-gray-900">시작날짜</label>
-                        <input id="start_date" type="text" class="form-control form-control form-control-solid datepicker" autocomplete="off">
+                        <input id="start_date" type="text" class="form-control form-control form-control-solid datepicker" autocomplete="off" readonly>
                     </div>
 
                     <div class="col-lg-2">
                         <label class="fs-6 form-label fw-bold text-gray-900">종료날짜</label>
-                        <input id="end_date" type="text" class="form-control form-control form-control-solid datepicker" autocomplete="off">
+                        <input id="end_date" type="text" class="form-control form-control form-control-solid datepicker" autocomplete="off" readonly>
                     </div>
 
                     <div class="col-lg-2">
