@@ -40,12 +40,28 @@ class CompanyMgmt {
             url: "/companymgmt/list",
             data: param,
             success: function(res) {
-                console.log(res);
-
                 self.grid.resetData(res);
             },
             error: function(XMLHttpRequest, textStatus, errorThrown){
-                alert("통신 실패.");
+                alert("데이터 로드에 실패하였습니다.");
+            }
+        });
+    }
+
+    add(data) {
+
+        let self = this;
+
+        $.ajax({
+            type: "POST",
+            url: "/companymgmt/add",
+            data: data,
+            success: function(res) {
+                
+                self.loadData();
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown){
+                alert("저장에 실패하였습니다.");
             }
         });
     }
