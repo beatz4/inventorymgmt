@@ -8,8 +8,14 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name="TBL_COMPANY_MGMT")
 public class CompanyEntity {
     
@@ -32,4 +38,13 @@ public class CompanyEntity {
 
     @Column(name = "created_date")
     private Instant createdDate;
+
+    @Builder
+    public CompanyEntity(String code, String address, String phone, String email) {
+        this.code = code;
+        this.address = address;
+        this.phone = phone;
+        this.email = email;
+        this.createdDate = Instant.now();
+    }
 }

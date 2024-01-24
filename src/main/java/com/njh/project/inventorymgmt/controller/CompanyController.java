@@ -1,29 +1,24 @@
 package com.njh.project.inventorymgmt.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.stereotype.Controller;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.njh.project.inventorymgmt.dto.CompanyDto;
+import com.njh.project.inventorymgmt.service.CompanyService;
 
-@Controller
+@RestController
 public class CompanyController {
+
+     @Autowired
+    CompanyService companyService;
     
-    // view
-    @GetMapping("/companymgmt")
-    public String getCompanyView() {
-        return "/companymgmt";
-    }
-    
-    // api
-    @GetMapping("/list")
+     // api
+    @GetMapping("/companymgmt/list")
     public List<CompanyDto> getList() {
 
-        List<CompanyDto> result = new ArrayList<>();
-
-        return result;
+        return companyService.getList();
     }
-    
 }

@@ -2,6 +2,7 @@ package com.njh.project.inventorymgmt.service;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,14 +22,13 @@ public class CompanyService {
 
         List<CompanyDto> result = new ArrayList<>();
 
-        // companyRepository.findAll().stream().map(x ->
-        //     x.get
-        // );
-
-        // CompanyDto.builder()
-        //     .seq(null)
-        
-
-        return null;
+        return companyRepository.findAll().stream().map(x -> 
+            CompanyDto.builder()
+                .seq(x.getSeq())
+                .code(x.getCode())
+                .address(x.getAddress())
+                .email(x.getEmail())
+                .createdDate(x.getCreatedDate())
+            .build()).collect(Collectors.toList());
     }
 }

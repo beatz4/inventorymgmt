@@ -395,8 +395,8 @@
   display: block;
   overflow: hidden;
   line-height: 1.5;
-  *margin-left: -2px;
-  *padding-left: 2px;
+  margin-left: -2px;
+  padding-left: 2px;
 }
 .tui-grid-cell-content input[type='text'],
 .tui-grid-cell-content input[type='password'] {
