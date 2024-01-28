@@ -224,7 +224,11 @@
                 phone: phone
             };
 
-            view.add(JSON.stringify(data));
+            let items = {
+                itrem: JSON.stringify(data)
+            };
+
+            view.add(items);
         });
     });
 

@@ -1,7 +1,7 @@
 package com.njh.project.inventorymgmt.service;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.njh.project.inventorymgmt.dto.CompanyDto;
+import com.njh.project.inventorymgmt.entity.CompanyEntity;
+import com.njh.project.inventorymgmt.exception.InvalidArgumentException;
 import com.njh.project.inventorymgmt.repository.CompanyRepository;
 
 @Service
@@ -27,8 +29,20 @@ public class CompanyService {
                 .seq(x.getSeq())
                 .code(x.getCode())
                 .address(x.getAddress())
+                .phone(x.getPhone())
                 .email(x.getEmail())
                 .createdDate(x.getCreatedDate())
             .build()).collect(Collectors.toList());
+    }
+
+    public boolean save(String code, String address, String phone, String email) throws InvalidArgumentException {
+
+        try {
+            companyRepository.save(new CompanyEntity(code, address, phone, email));
+        } catch (Exception e) {
+            throw new InvalidArgumentException();
+        }
+
+        return true;
     }
 }
