@@ -3,6 +3,8 @@ package com.njh.project.inventorymgmt.controller;
 import java.util.List;
 import java.util.Map;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,6 +33,8 @@ public class CompanyController {
     public Boolean save(HttpServletRequest request) {
 
         Map<String, String[]> data = request.getParameterMap();
+
+        JSONObject jsonObject = new JSONObject(request.getParameter("items"));
         
        
         // JSONObject data = request.getAttribute("data");
