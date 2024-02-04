@@ -3,31 +3,46 @@ package com.njh.project.inventorymgmt.controller;
 import java.util.List;
 
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.njh.project.inventorymgmt.dto.CompanyDto;
+import com.njh.project.inventorymgmt.dto.CompanySearchCriteria;
 import com.njh.project.inventorymgmt.exception.NotExistException;
 import com.njh.project.inventorymgmt.service.CompanyService;
 
 import jakarta.servlet.http.HttpServletRequest;
 
-
-
 @RestController
 public class CompanyController {
 
-    @Autowired
     CompanyService companyService;
+
+    public CompanyController(CompanyService companyService) {
+        this.companyService = companyService;
+    }
     
-     // api
     @GetMapping("/companymgmt/list")
     public List<CompanyDto> getList() {
-
         return companyService.getList();
+    }
+
+    @GetMapping("/companymgmt/list/search")
+    public List<CompanyDto> search(HttpServletRequest request) {
+
+        JSONObject jsonObject = new JSONObject(request.getParameter("items"));
+
+        String type = jsonObject.get("type").toString();
+        String keyword = jsonObject.get("keyword").toString();
+        String startDate = jsonObject.get("start_date").toString();
+        String endDate = jsonObject.get("end_date").toString();
+
+        CompanySearchCriteria companySearchCriteria = new CompanySearchCriteria();
+
+        companySearchCriteria.setSearchCriteria(type, keyword, startDate, endDate);
+        return companyService.search(companySearchCriteria);
     }
 
     @PostMapping("/companymgmt/add")
@@ -57,6 +72,7 @@ public class CompanyController {
             companyService.delete(seqs);
         } catch (NotExistException e) {
             e.printStackTrace();
+            return false;
         }
 
         return true;

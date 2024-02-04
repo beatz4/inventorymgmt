@@ -40,7 +40,9 @@ class CompanyMgmt {
             url: "/companymgmt/list",
             data: param,
             success: function(res) {
-                self.grid.resetData(res);
+                self.grid.resetData(
+                    res
+                );
             },
             error: function(XMLHttpRequest, textStatus, errorThrown){
                 alert("데이터 로드에 실패하였습니다.");
@@ -66,7 +68,6 @@ class CompanyMgmt {
             }
         })
         .done(function(data, textStatus, xhr) {
-            //if (doneFunc.clas)
             doneFunc();
         });
         ;
@@ -95,5 +96,21 @@ class CompanyMgmt {
                 }
             });
         }
+    }
+
+    search(data) {
+        let self = this;
+
+        $.ajax({
+            type: "GET",
+            url: "/companymgmt/list/search",
+            data: data,
+            success: function(res) {
+                self.grid.resetData(res);
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown){
+                alert("검색 실패하였습니다.");
+            }
+        });
     }
 }

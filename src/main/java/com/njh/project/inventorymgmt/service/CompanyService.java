@@ -1,18 +1,20 @@
 package com.njh.project.inventorymgmt.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.njh.project.inventorymgmt.dto.CompanyDto;
+import com.njh.project.inventorymgmt.dto.CompanySearchCriteria;
 import com.njh.project.inventorymgmt.entity.CompanyEntity;
 import com.njh.project.inventorymgmt.exception.InvalidArgumentException;
 import com.njh.project.inventorymgmt.exception.NotExistException;
 import com.njh.project.inventorymgmt.repository.CompanyRepository;
+import com.njh.project.inventorymgmt.repository.CompanySpecification;
 
 @Service
 @Transactional
@@ -23,11 +25,26 @@ public class CompanyService {
 
     public List<CompanyDto> getList() {
 
-        List<CompanyDto> result = new ArrayList<>();
-
         return companyRepository.findAll().stream().map(x -> 
             CompanyDto.builder()
                 .seq(x.getSeq())
+                .name(x.getName())
+                .code(x.getCode())
+                .address(x.getAddress())
+                .phone(x.getPhone())
+                .email(x.getEmail())
+                .createdDate(x.getCreatedDate())
+            .build()).collect(Collectors.toList());
+    }
+
+    public List<CompanyDto> search(CompanySearchCriteria companySearchCriteria) {
+
+        Specification<CompanyEntity> spec = Specification.where(CompanySpecification.search(companySearchCriteria));
+
+        return companyRepository.findAll(spec).stream().map(x -> 
+            CompanyDto.builder()
+                .seq(x.getSeq())
+                .name(x.getName())
                 .code(x.getCode())
                 .address(x.getAddress())
                 .phone(x.getPhone())
@@ -52,7 +69,6 @@ public class CompanyService {
     public void delete(Long []seqs) throws NotExistException {
 
         try {
-            // companyRepository.findByIdIn(seqs);
             companyRepository.deleteBySeqIn(seqs);
         } catch (Exception e) {
             throw new NotExistException(e.getMessage());

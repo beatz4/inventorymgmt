@@ -12,6 +12,7 @@ import lombok.Getter;
 public class CompanyDto {
 
     private Long seq;
+    private String name;
     private String code;
     private String address;
     private String phone;
