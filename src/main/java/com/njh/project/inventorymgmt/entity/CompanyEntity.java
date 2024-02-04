@@ -24,6 +24,9 @@ public class CompanyEntity {
     @Column(name = "id")
     private Long seq;
 
+    @Column(name = "name")
+    private String name;
+
     @Column(name = "code")
     private String code;
 
@@ -40,7 +43,8 @@ public class CompanyEntity {
     private Instant createdDate;
 
     @Builder
-    public CompanyEntity(String code, String address, String phone, String email) {
+    public CompanyEntity(String name, String code, String address, String phone, String email) {
+        this.name = name;
         this.code = code;
         this.address = address;
         this.phone = phone;

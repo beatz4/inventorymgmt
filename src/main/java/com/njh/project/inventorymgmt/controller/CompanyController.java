@@ -1,9 +1,7 @@
 package com.njh.project.inventorymgmt.controller;
 
 import java.util.List;
-import java.util.Map;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,14 +30,19 @@ public class CompanyController {
     @PostMapping("/companymgmt/add")
     public Boolean save(HttpServletRequest request) {
 
-        Map<String, String[]> data = request.getParameterMap();
-
         JSONObject jsonObject = new JSONObject(request.getParameter("items"));
-        
-       
-        // JSONObject data = request.getAttribute("data");
 
-        // companyService.save(null, null, null, null)
+        String name = jsonObject.get("name").toString();
+        String address = jsonObject.get("address").toString();
+        String code = jsonObject.get("code").toString();
+        String email = jsonObject.get("email").toString();
+        String phone = jsonObject.get("phone").toString();
+
+        try {
+            companyService.save(name, code, address, phone, email);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
 
         return true;
     }

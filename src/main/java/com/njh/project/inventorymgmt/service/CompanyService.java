@@ -35,10 +35,10 @@ public class CompanyService {
             .build()).collect(Collectors.toList());
     }
 
-    public boolean save(String code, String address, String phone, String email) throws InvalidArgumentException {
+    public boolean save(String name, String code, String address, String phone, String email) throws InvalidArgumentException {
 
         try {
-            companyRepository.save(new CompanyEntity(code, address, phone, email));
+            companyRepository.save(new CompanyEntity(name, code, address, phone, email));
         } catch (Exception e) {
             throw new InvalidArgumentException();
         }
