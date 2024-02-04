@@ -6,12 +6,15 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.njh.project.inventorymgmt.dto.CompanyDto;
+import com.njh.project.inventorymgmt.exception.NotExistException;
 import com.njh.project.inventorymgmt.service.CompanyService;
 
 import jakarta.servlet.http.HttpServletRequest;
+
 
 
 @RestController
@@ -41,6 +44,18 @@ public class CompanyController {
         try {
             companyService.save(name, code, address, phone, email);
         } catch(Exception e) {
+            e.printStackTrace();
+        }
+
+        return true;
+    }
+    
+    @PostMapping("/companymgmt/delete")
+    public Boolean delete(@RequestParam Long[] seqs) {
+
+        try {
+            companyService.delete(seqs);
+        } catch (NotExistException e) {
             e.printStackTrace();
         }
 

@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.njh.project.inventorymgmt.dto.CompanyDto;
 import com.njh.project.inventorymgmt.entity.CompanyEntity;
 import com.njh.project.inventorymgmt.exception.InvalidArgumentException;
+import com.njh.project.inventorymgmt.exception.NotExistException;
 import com.njh.project.inventorymgmt.repository.CompanyRepository;
 
 @Service
@@ -35,14 +36,26 @@ public class CompanyService {
             .build()).collect(Collectors.toList());
     }
 
+    @Transactional
     public boolean save(String name, String code, String address, String phone, String email) throws InvalidArgumentException {
 
         try {
             companyRepository.save(new CompanyEntity(name, code, address, phone, email));
         } catch (Exception e) {
-            throw new InvalidArgumentException();
+            throw new InvalidArgumentException(e.getMessage());
         }
 
         return true;
+    }
+
+    @Transactional
+    public void delete(Long []seqs) throws NotExistException {
+
+        try {
+            // companyRepository.findByIdIn(seqs);
+            companyRepository.deleteBySeqIn(seqs);
+        } catch (Exception e) {
+            throw new NotExistException(e.getMessage());
+        }
     }
 }

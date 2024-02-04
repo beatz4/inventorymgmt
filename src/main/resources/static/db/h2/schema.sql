@@ -14,5 +14,5 @@ CREATE TABLE TBL_COMPANY_MGMT
 );
 
 -- 테스트 데이터
-INSERT INTO TBL_COMPANY_MGMT (`id`, `name`, `code`, `address`, phone, email, created_date) 
-    VALUES (1, 'test company', 'TEST0001', '서울', '010-1234-5678', 'test@test.com', now());
+INSERT INTO TBL_COMPANY_MGMT (`name`, `code`, `address`, phone, email, created_date) 
+    VALUES ('test company', 'TEST0001', '서울', '010-1234-5678', 'test@test.com', now());
