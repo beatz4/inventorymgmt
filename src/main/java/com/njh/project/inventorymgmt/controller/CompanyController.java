@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.njh.project.inventorymgmt.dto.AddressDto;
 import com.njh.project.inventorymgmt.dto.CompanyDto;
 import com.njh.project.inventorymgmt.dto.CompanySearchCriteria;
 import com.njh.project.inventorymgmt.exception.NotExistException;
@@ -50,15 +51,33 @@ public class CompanyController {
 
         JSONObject jsonObject = new JSONObject(request.getParameter("items"));
 
-        Long seq = jsonObject.has("seq") ? Long.parseLong(jsonObject.get("seq").toString()) : -1L;
+        Long seq = -1L;
+        if (jsonObject.has("seq") && !jsonObject.get("seq").toString().isEmpty()) {
+            seq = Long.parseLong(jsonObject.get("seq").toString());
+        }
         String name = jsonObject.get("name").toString();
-        String address = jsonObject.get("address").toString();
         String code = jsonObject.get("code").toString();
         String email = jsonObject.get("email").toString();
         String phone = jsonObject.get("phone").toString();
 
+        // address
+        Integer zipcode = Integer.parseInt(jsonObject.get("zipcode").toString());
+        String roadAddress = jsonObject.get("roadAddress").toString();
+        String jibunAddress = jsonObject.get("jibunAddress").toString();
+        String detailAddress = jsonObject.get("detailAddress").toString();
+        String extraAddress = jsonObject.get("extraAddress").toString();
+
+        
+
         try {
-            companyService.save(seq, name, code, address, phone, email);
+            companyService.save(seq, name, code, phone, email, 
+                AddressDto.builder()
+                    .zipcode(zipcode)
+                    .roadAddress(roadAddress)
+                    .jibunAddress(jibunAddress)
+                    .detailAddress(detailAddress)
+                    .extraAddress(extraAddress)
+                .build());
         } catch(Exception e) {
             e.printStackTrace();
         }

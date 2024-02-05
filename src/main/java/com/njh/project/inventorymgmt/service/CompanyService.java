@@ -9,11 +9,15 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.njh.project.inventorymgmt.dto.AddressDto;
 import com.njh.project.inventorymgmt.dto.CompanyDto;
 import com.njh.project.inventorymgmt.dto.CompanySearchCriteria;
-import com.njh.project.inventorymgmt.entity.CompanyEntity;
+import com.njh.project.inventorymgmt.entity.Address;
+import com.njh.project.inventorymgmt.entity.Company;
 import com.njh.project.inventorymgmt.exception.InvalidArgumentException;
+import com.njh.project.inventorymgmt.exception.NotExistAddressException;
 import com.njh.project.inventorymgmt.exception.NotExistException;
+import com.njh.project.inventorymgmt.repository.AddressRepository;
 import com.njh.project.inventorymgmt.repository.CompanyRepository;
 import com.njh.project.inventorymgmt.repository.CompanySpecification;
 
@@ -24,8 +28,13 @@ import lombok.extern.slf4j.Slf4j;
 @Transactional
 public class CompanyService {
     
-    @Autowired
     CompanyRepository companyRepository;
+    AddressRepository addressRepository;
+
+    CompanyService(CompanyRepository companyRepository, AddressRepository addressRepository) {
+        this.companyRepository = companyRepository;
+        this.addressRepository = addressRepository;
+    }
 
     public List<CompanyDto> getList() {
 
@@ -44,7 +53,7 @@ public class CompanyService {
 
     public List<CompanyDto> search(CompanySearchCriteria companySearchCriteria) {
 
-        Specification<CompanyEntity> spec = Specification.where(CompanySpecification.search(companySearchCriteria));
+        Specification<Company> spec = Specification.where(CompanySpecification.search(companySearchCriteria));
 
         return companyRepository.findAll(spec).stream().map(x -> 
             CompanyDto.builder()
@@ -60,7 +69,7 @@ public class CompanyService {
     }
 
     @Transactional
-    public boolean save(Long seq, String name, String code, String address, String phone, String email) throws InvalidArgumentException {
+    public boolean save(Long seq, String name, String code, String phone, String email, AddressDto addressDto) throws InvalidArgumentException {
 
         try {
 
@@ -69,15 +78,27 @@ public class CompanyService {
                 return false;
             }
 
-            Optional<CompanyEntity> companyEntity = companyRepository.findById(seq);
+            Optional<Company> companyEntity = companyRepository.findById(seq);
 
             if (companyEntity.isPresent()) {
+
+                // 주소 데이터 변경
+                Optional<Address> address = addressRepository.findById(companyEntity.get().getAddress().getSeq());
+
+                if (address.isPresent()) {
+                    address.get().changeAddressData(addressDto);
+                    addressRepository.save(address.get());
+                } else {
+                    throw new NotExistAddressException("company info : " + seq);
+                }
                 
-                companyEntity.get().changeCompanyData(name, code, address, phone, email);
+                companyEntity.get().changeCompanyData(name, code, phone, email);
                 companyRepository.save(companyEntity.get());
 
             } else {
-                companyRepository.save(new CompanyEntity(name, code, address, phone, email));
+
+                Address address = addressRepository.save(AddressDto.toEntity(addressDto));
+                companyRepository.save(new Company(name, code, phone, email, address));
             }
             
         } catch (Exception e) {

@@ -7,13 +7,13 @@ import java.util.List;
 import org.springframework.data.jpa.domain.Specification;
 
 import com.njh.project.inventorymgmt.dto.CompanySearchCriteria;
-import com.njh.project.inventorymgmt.entity.CompanyEntity;
+import com.njh.project.inventorymgmt.entity.Company;
 
 import jakarta.persistence.criteria.Predicate;
 
 public class CompanySpecification {
 
-    public static Specification<CompanyEntity> search(CompanySearchCriteria criteria) {
+    public static Specification<Company> search(CompanySearchCriteria criteria) {
 
         return (root, query, builder) -> {
 

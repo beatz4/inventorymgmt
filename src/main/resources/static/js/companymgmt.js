@@ -47,9 +47,14 @@ class CompanyMgmt {
             $('#company_seq').val(selectedData.seq);
             $('#company_name').val(selectedData.name);
             $('#company_code').val(selectedData.code);
-            $('#company_addr').val(selectedData.address);
             $('#company_email').val(selectedData.email);
             $('#company_phone').val(selectedData.phone);
+
+            $('#zipcode').val(selectedData.address.zipcode);
+            $('#roadAddress').val(selectedData.address.roadAddress);
+            $('#jibunAddress').val(selectedData.address.jibunAddress);
+            $('#detailAddress').val(selectedData.address.detailAddress);
+            $('#extraAddress').val(selectedData.address.extraAddress);
         });
     }
 
