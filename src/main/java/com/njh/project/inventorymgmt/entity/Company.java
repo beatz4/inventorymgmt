@@ -37,7 +37,7 @@ public class Company {
     private Address address;
 
     @Column(name = "phone")
-    private String phone;
+    private String phone; 
 
     @Column(name = "email")
     private String email;
