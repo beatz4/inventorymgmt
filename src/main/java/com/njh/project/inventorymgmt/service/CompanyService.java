@@ -1,6 +1,7 @@
 package com.njh.project.inventorymgmt.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,9 @@ import com.njh.project.inventorymgmt.exception.NotExistException;
 import com.njh.project.inventorymgmt.repository.CompanyRepository;
 import com.njh.project.inventorymgmt.repository.CompanySpecification;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 @Transactional
 public class CompanyService {
@@ -34,6 +38,7 @@ public class CompanyService {
                 .phone(x.getPhone())
                 .email(x.getEmail())
                 .createdDate(x.getCreatedDate())
+                .updatedDate(x.getUpdatedDate())
             .build()).collect(Collectors.toList());
     }
 
@@ -50,14 +55,31 @@ public class CompanyService {
                 .phone(x.getPhone())
                 .email(x.getEmail())
                 .createdDate(x.getCreatedDate())
+                .updatedDate(x.getUpdatedDate())
             .build()).collect(Collectors.toList());
     }
 
     @Transactional
-    public boolean save(String name, String code, String address, String phone, String email) throws InvalidArgumentException {
+    public boolean save(Long seq, String name, String code, String address, String phone, String email) throws InvalidArgumentException {
 
         try {
-            companyRepository.save(new CompanyEntity(name, code, address, phone, email));
+
+            if (seq == null) {
+                log.error("Invalid seq parameter");
+                return false;
+            }
+
+            Optional<CompanyEntity> companyEntity = companyRepository.findById(seq);
+
+            if (companyEntity.isPresent()) {
+                
+                companyEntity.get().changeCompanyData(name, code, address, phone, email);
+                companyRepository.save(companyEntity.get());
+
+            } else {
+                companyRepository.save(new CompanyEntity(name, code, address, phone, email));
+            }
+            
         } catch (Exception e) {
             throw new InvalidArgumentException(e.getMessage());
         }

@@ -18,4 +18,5 @@ public class CompanyDto {
     private String phone;
     private String email;
     private Instant createdDate;
+    private Instant updatedDate;
 }

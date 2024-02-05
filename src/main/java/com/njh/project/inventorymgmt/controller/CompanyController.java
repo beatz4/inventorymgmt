@@ -45,11 +45,12 @@ public class CompanyController {
         return companyService.search(companySearchCriteria);
     }
 
-    @PostMapping("/companymgmt/add")
+    @PostMapping("/companymgmt/save")
     public Boolean save(HttpServletRequest request) {
 
         JSONObject jsonObject = new JSONObject(request.getParameter("items"));
 
+        Long seq = jsonObject.has("seq") ? Long.parseLong(jsonObject.get("seq").toString()) : -1L;
         String name = jsonObject.get("name").toString();
         String address = jsonObject.get("address").toString();
         String code = jsonObject.get("code").toString();
@@ -57,7 +58,7 @@ public class CompanyController {
         String phone = jsonObject.get("phone").toString();
 
         try {
-            companyService.save(name, code, address, phone, email);
+            companyService.save(seq, name, code, address, phone, email);
         } catch(Exception e) {
             e.printStackTrace();
         }

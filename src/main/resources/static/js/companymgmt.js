@@ -11,6 +11,7 @@ class CompanyMgmt {
 
         this.grid = this.initGrid();
         this.loadData();
+        this.addGridEvent();
     }
 
     initGrid() {
@@ -18,16 +19,38 @@ class CompanyMgmt {
         const grid = new tui.Grid({
             el: document.getElementById(this.config.grid),
             rowHeaders: ['checkbox'],
-            scrollX: false,
-            scrollY: false,
+            scrollX: true,
+            scrollY: true,
             draggable: false,
             header: { height: 30 },
             bodyHeight: 200,
             contextMenu: null,
-            columns: this.config.columns
+            columns: this.config.columns,
+            pageOptions: {
+                useClient: true,
+                type: 'scroll',
+                perPage: 50
+            }
         });
 
         return grid;
+    }
+
+    addGridEvent() {
+
+        this.grid.on('dblclick', () => {
+
+            const selectedData = this.grid.getRow(this.grid.getFocusedCell().rowKey);
+            
+            $('#popupAddCompay').modal('toggle');
+
+            $('#company_seq').val(selectedData.seq);
+            $('#company_name').val(selectedData.name);
+            $('#company_code').val(selectedData.code);
+            $('#company_addr').val(selectedData.address);
+            $('#company_email').val(selectedData.email);
+            $('#company_phone').val(selectedData.phone);
+        });
     }
 
     loadData() {
@@ -50,13 +73,13 @@ class CompanyMgmt {
         });
     }
 
-    add(data, doneFunc) {
+    save(data) {
 
         let self = this;
 
         $.ajax({
             type: "POST",
-            url: "/companymgmt/add",
+            url: "/companymgmt/save",
             data: data,
             success: function(res) {
                 alert("저장되었습니다.");
@@ -66,11 +89,7 @@ class CompanyMgmt {
             error: function(XMLHttpRequest, textStatus, errorThrown){
                 alert("저장에 실패하였습니다.");
             }
-        })
-        .done(function(data, textStatus, xhr) {
-            doneFunc();
         });
-        ;
     }
 
     delete() {

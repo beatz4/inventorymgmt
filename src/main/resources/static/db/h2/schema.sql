@@ -5,11 +5,12 @@ CREATE TABLE TBL_COMPANY_MGMT
 (
     `id`      BIGINT          NOT NULL AUTO_INCREMENT,
     `name`    VARCHAR(100)    NOT NULL,
-    `code`    VARCHAR(20)     NOT NULL,
+    `code`    VARCHAR(20)     NOT NULL UNIQUE,
     `address` VARCHAR(255)    NOT NULL,
     `phone`   VARCHAR(255)    NOT NULL,
     `email`   VARCHAR(100)    NOT NULL,
     `created_date` TIMESTAMP,
+    `updated_date` TIMESTAMP DEFAULT NOW(),
     CONSTRAINT TBL_COMPANY_MGMT_PK PRIMARY KEY (id)
 );
 

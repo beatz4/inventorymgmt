@@ -42,6 +42,9 @@ public class CompanyEntity {
     @Column(name = "created_date")
     private Instant createdDate;
 
+    @Column(name = "updated_date")
+    private Instant updatedDate;
+
     @Builder
     public CompanyEntity(String name, String code, String address, String phone, String email) {
         this.name = name;
@@ -50,5 +53,14 @@ public class CompanyEntity {
         this.phone = phone;
         this.email = email;
         this.createdDate = Instant.now();
+    }
+
+    public void changeCompanyData(String name, String code, String address, String phone, String email) {
+        this.name = name;
+        this.code = code;
+        this.address = address;
+        this.phone = phone;
+        this.email = email;
+        this.updatedDate = Instant.now();
     }
 }
