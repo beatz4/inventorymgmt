@@ -40,3 +40,23 @@ CREATE TABLE TBL_COMPANY_MGMT
 -- -- 테스트 데이터
 INSERT INTO TBL_COMPANY_MGMT (`name`, `code`, `address_id`, phone, email, created_date) 
     VALUES ('test company', 'TEST0001', '1', '010-1234-5678', 'test@test.com', now());
+
+
+-- 재고관리
+DROP TABLE IF EXISTS TBL_PRODUCT_MGMT;
+
+CREATE TABLE TBL_PRODUCT_MGMT
+(
+    `id`      BIGINT          NOT NULL AUTO_INCREMENT,
+    `name`    VARCHAR(100)    NOT NULL,
+    `code`    VARCHAR(20)     NOT NULL UNIQUE,
+    `amount`  BIGINT          NOT NULL,
+    `price`   BIGINT          NOT NULL,
+    `created_date` TIMESTAMP,
+    `updated_date` TIMESTAMP DEFAULT NOW(),
+    CONSTRAINT TBL_PRODUCT_MGMT_PK PRIMARY KEY (id)
+);
+
+-- 테스트 데이터
+INSERT INTO TBL_PRODUCT_MGMT (`name`, `code`, `amount`, price) 
+    VALUES ('test product', 'PTEST0001', '5', '30000');
