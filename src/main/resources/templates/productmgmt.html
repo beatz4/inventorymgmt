@@ -102,17 +102,7 @@
                     <input type="text" class="form-control" id="company_code">
                 </div>
                 <div class="mb-3">
-                    <label for="zipcode" class="col-form-label">기본주소:</label><br>
-                    <input type="text" id="zipcode" style="width: 20% !important;" class="margin-top" placeholder="우편번호">
-                    <input type="button" class="margin-top" onclick="openPostCode();" value="우편번호 찾기"><br>
-                    <input type="text" id="roadAddress" class="margin-top address" placeholder="도로명주소">
-                    <input type="text" id="jibunAddress" class="margin-top address" placeholder="지번주소">
-                    <span id="guide" style="color:#999;display:none" class="margin-top"></span>
-                    <input type="text" id="detailAddress" class="margin-top" placeholder="상세주소">
-                    <input type="text" id="extraAddress" class="margin-top" placeholder="참고항목">
-                </div>
-                <div class="mb-3">
-                    <label for="company_phone" class="col-form-label">대표번호:</label>
+                    <label for="company_phone" class="col-form-label">단가:</label>
                     <input type="text" class="form-control" id="company_phone" placeholder="'-'문자를 포함하여 입력해주세요.">
                 </div>
                 <div class="mb-3">
@@ -148,7 +138,7 @@ let columns = [
             header: '상품명',
             name: 'name',
             align: 'center',
-            width: 150,
+            width: 300,
             whiteSpace: 'normal',
             formatter: function(e) {
                 return e.value
@@ -168,27 +158,27 @@ let columns = [
             header: '재고수량',
             name: 'amount',
             align: 'center',
-            width: 300,
+            width: 100,
             whiteSpace: 'normal',
             formatter: function(e) {
-                return e.value
+                return e.value.toLocaleString();
             },
         },
         {
-            header: '상품가',
+            header: '단가',
             name: 'price',
             align: 'center',
-            width: 150,
+            width: 200,
             whiteSpace: 'normal',
             formatter: function(e) {
-                return e.value
+                return e.value.toLocaleString();
             },
         },
         {
             header: '생성일자',
             name: 'createdDate',
             align: 'center',
-            width: 300,
+            width: 200,
             whiteSpace: 'normal',
             formatter: function(e) {
                 return new Date(e.value).toLocaleString();
@@ -198,7 +188,7 @@ let columns = [
             header: '수정일자',
             name: 'updatedDate',
             align: 'center',
-            width: 300,
+            width: 200,
             whiteSpace: 'normal',
             formatter: function(e) {
                 return new Date(e.value).toLocaleString();

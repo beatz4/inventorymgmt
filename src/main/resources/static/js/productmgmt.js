@@ -10,9 +10,9 @@ class ProductMgmt {
         };
 
         this.grid = this.initGrid();
-        // this.loadData();
+        this.loadData(); 
         // this.addGridEvent();
-    }
+    } 
 
     initGrid() {
 
@@ -39,6 +39,25 @@ class ProductMgmt {
     addGridEvent() {
 
         this.grid.on('dblclick', () => {
+        });
+    }
+
+    loadData() {
+        let self = this;
+        let param = {};
+
+        $.ajax({
+            type: "GET",
+            url: "/productmgmt/list",
+            data: param,
+            success: function(res) {
+                self.grid.resetData(
+                    res
+                );
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown){
+                alert("데이터 로드에 실패하였습니다.");
+            }
         });
     }
 

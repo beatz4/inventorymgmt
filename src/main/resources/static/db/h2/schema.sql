@@ -52,7 +52,7 @@ CREATE TABLE TBL_PRODUCT_MGMT
     `code`    VARCHAR(20)     NOT NULL UNIQUE,
     `amount`  BIGINT          NOT NULL,
     `price`   BIGINT          NOT NULL,
-    `created_date` TIMESTAMP,
+    `created_date` TIMESTAMP DEFAULT NOW(),
     `updated_date` TIMESTAMP DEFAULT NOW(),
     CONSTRAINT TBL_PRODUCT_MGMT_PK PRIMARY KEY (id)
 );

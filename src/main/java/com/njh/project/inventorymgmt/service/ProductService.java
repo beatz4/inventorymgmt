@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.njh.project.inventorymgmt.dto.ProductDto;
+import com.njh.project.inventorymgmt.entity.Product;
+import com.njh.project.inventorymgmt.exception.NotFoundException;
 import com.njh.project.inventorymgmt.repository.ProductRepository;
 
 import lombok.extern.slf4j.Slf4j;
@@ -35,5 +37,37 @@ public class ProductService {
                 .createdDate(x.getCreatedDate())
                 .updatedDate(x.getUpdatedDate())
             .build()).collect(Collectors.toList());
+    }
+
+    public Boolean save(Long seq, String name, String code, Long amount, Long price) {
+
+        try {
+            if (seq > 0) {
+
+                Optional<Product> product = productRepository.findById(seq);
+
+                if (product.isPresent()) {
+
+                    product.get().changeProductData(name, code, amount, price);
+                    productRepository.save(product.get());
+                } else {
+                    log.error("Not found exception in save function...");
+                    throw new NotFoundException("상품을 찾지 못했습니다.");
+                }
+
+            } else {
+                productRepository.save(Product.builder()
+                    .name(name)
+                    .code(code)
+                    .amount(amount)
+                    .price(price)
+                .build());
+            }
+        } catch (Exception e) {
+            log.error("Occured something wrong...");
+            return false;
+        }
+
+        return true;
     }
 }

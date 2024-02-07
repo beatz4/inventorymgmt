@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.njh.project.inventorymgmt.dto.AddressDto;
 import com.njh.project.inventorymgmt.dto.CompanyDto;
 import com.njh.project.inventorymgmt.dto.CompanySearchCriteria;
-import com.njh.project.inventorymgmt.exception.NotExistException;
+import com.njh.project.inventorymgmt.exception.NotFoundException;
 import com.njh.project.inventorymgmt.service.CompanyService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -67,8 +67,6 @@ public class CompanyController {
         String detailAddress = jsonObject.get("detailAddress").toString();
         String extraAddress = jsonObject.get("extraAddress").toString();
 
-        
-
         try {
             companyService.save(seq, name, code, phone, email, 
                 AddressDto.builder()
@@ -90,7 +88,7 @@ public class CompanyController {
 
         try {
             companyService.delete(seqs);
-        } catch (NotExistException e) {
+        } catch (NotFoundException e) {
             e.printStackTrace();
             return false;
         }

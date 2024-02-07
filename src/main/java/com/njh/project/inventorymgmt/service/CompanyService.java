@@ -14,8 +14,8 @@ import com.njh.project.inventorymgmt.dto.CompanySearchCriteria;
 import com.njh.project.inventorymgmt.entity.Address;
 import com.njh.project.inventorymgmt.entity.Company;
 import com.njh.project.inventorymgmt.exception.InvalidArgumentException;
-import com.njh.project.inventorymgmt.exception.NotExistAddressException;
-import com.njh.project.inventorymgmt.exception.NotExistException;
+import com.njh.project.inventorymgmt.exception.NotFoundAddressException;
+import com.njh.project.inventorymgmt.exception.NotFoundException;
 import com.njh.project.inventorymgmt.repository.AddressRepository;
 import com.njh.project.inventorymgmt.repository.CompanyRepository;
 import com.njh.project.inventorymgmt.repository.CompanySpecification;
@@ -68,7 +68,7 @@ public class CompanyService {
     }
 
     @Transactional
-    public boolean save(Long seq, String name, String code, String phone, String email, AddressDto addressDto) throws InvalidArgumentException {
+    public boolean save(Long seq, String name, String code, String phone, String email, AddressDto addressDto) {
 
         try {
 
@@ -88,7 +88,7 @@ public class CompanyService {
                     address.get().changeAddressData(addressDto);
                     addressRepository.save(address.get());
                 } else {
-                    throw new NotExistAddressException("company info : " + seq);
+                    throw new NotFoundAddressException("company info : " + seq);
                 }
                 
                 companyEntity.get().changeCompanyData(name, code, phone, email);
@@ -101,19 +101,19 @@ public class CompanyService {
             }
             
         } catch (Exception e) {
-            throw new InvalidArgumentException(e.getMessage());
+            log.error("Occured something wrong in save function...");
         }
 
         return true;
     }
 
     @Transactional
-    public void delete(Long []seqs) throws NotExistException {
+    public void delete(Long []seqs) throws NotFoundException {
 
         try {
             companyRepository.deleteBySeqIn(seqs);
         } catch (Exception e) {
-            throw new NotExistException(e.getMessage());
+            throw new NotFoundException(e.getMessage());
         }
     }
 }
