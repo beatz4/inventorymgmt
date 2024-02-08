@@ -92,22 +92,22 @@
         </div>
         <div class="modal-body">
             <div>
-                <input type="hidden" id="company_seq">
+                <input type="hidden" id="product_seq">
                 <div class="mb-3">
-                    <label for="company_name" class="col-form-label">상품명:</label>
-                    <input type="text" class="form-control" id="company_name">
+                    <label for="product_name" class="col-form-label">상품명:</label>
+                    <input type="text" class="form-control" id="product_name">
                 </div>
                 <div class="mb-3">
-                    <label for="company_code" class="col-form-label">상품코드:</label>
-                    <input type="text" class="form-control" id="company_code">
+                    <label for="product_code" class="col-form-label">상품코드:</label>
+                    <input type="text" class="form-control" id="product_code">
                 </div>
                 <div class="mb-3">
-                    <label for="company_phone" class="col-form-label">단가:</label>
-                    <input type="text" class="form-control" id="company_phone" placeholder="'-'문자를 포함하여 입력해주세요.">
+                    <label for="product_price" class="col-form-label">단가:</label>
+                    <input type="text" class="form-control" id="product_price">
                 </div>
                 <div class="mb-3">
-                    <label for="company_email" class="col-form-label">대표 이메일:</label>
-                    <input type="text" class="form-control" id="company_email">
+                    <label for="product_amount" class="col-form-label">수량:</label>
+                    <input type="text" class="form-control" id="product_amount">
                 </div>
             </form>
         </div>
@@ -208,5 +208,58 @@ let columns = [
         }, function(start, end, label) {
             console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
         });
+
+        $('#btnAdd').click(function() {
+
+            const seq = $('#product_seq').val();
+            const name = $('#product_name').val();
+            const code = $('#product_code').val();
+            const amount = $('#product_amount').val();
+            const price = $('#product_price').val();
+
+            let data = {
+                seq: seq,
+                name: name,
+                code: code,
+                amount: amount,
+                price: price
+            };
+
+            let items = {
+                items: JSON.stringify(data)
+            };
+
+            view.save(items);
+        });
     });
+
+    function validateData() {
+        const seq = $('#product_seq').val();
+        const name = $('#product_name').val();
+        const code = $('#product_code').val();
+        const amount = $('#product_amount').val();
+        const price = $('#product_price').val();
+
+        if (name === '') {
+            alert('상품명을 기입해주세요.');
+            return false;
+        }
+
+        if (code === '') {
+            alert('상품코드를 기입해주세요.');
+            return false;
+        }
+
+        if (amount === '' || Number.isNaN(amount)) {
+            alert('수량을 숫자로 입력해주세요.');
+            return false;
+        }
+
+        if (price === '' || Number.isNaN(price)) {
+            alert('가격을 숫자로 입력해주세요.');
+            return false;
+        }
+
+        return true;
+    }
 </script>

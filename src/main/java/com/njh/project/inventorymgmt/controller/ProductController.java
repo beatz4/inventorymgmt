@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.njh.project.inventorymgmt.dto.AddressDto;
 import com.njh.project.inventorymgmt.dto.ProductDto;
 import com.njh.project.inventorymgmt.service.ProductService;
 

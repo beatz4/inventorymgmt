@@ -61,5 +61,22 @@ class ProductMgmt {
         });
     }
 
+    save(data) {
 
+        let self = this;
+
+        $.ajax({
+            type: "POST",
+            url: "/productmgmt/save",
+            data: data,
+            success: function(res) {
+                alert("저장되었습니다.");
+                $('#popupAddProduct').modal('toggle');
+                self.loadData();
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown){
+                alert("데이터 저장에 실패하였습니다.");
+            }
+        });
+    }
 }
