@@ -68,9 +68,7 @@ class CompanyMgmt {
             url: "/companymgmt/list",
             data: param,
             success: function(res) {
-                self.grid.resetData(
-                    res
-                );
+                self.grid.resetData(res);
             },
             error: function(XMLHttpRequest, textStatus, errorThrown){
                 alert("데이터 로드에 실패하였습니다.");

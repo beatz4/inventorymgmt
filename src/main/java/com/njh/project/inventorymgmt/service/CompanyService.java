@@ -10,10 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.njh.project.inventorymgmt.dto.AddressDto;
 import com.njh.project.inventorymgmt.dto.CompanyDto;
-import com.njh.project.inventorymgmt.dto.CompanySearchCriteria;
+import com.njh.project.inventorymgmt.dto.SearchCriteria;
 import com.njh.project.inventorymgmt.entity.Address;
 import com.njh.project.inventorymgmt.entity.Company;
-import com.njh.project.inventorymgmt.exception.InvalidArgumentException;
 import com.njh.project.inventorymgmt.exception.NotFoundAddressException;
 import com.njh.project.inventorymgmt.exception.NotFoundException;
 import com.njh.project.inventorymgmt.repository.AddressRepository;
@@ -50,9 +49,9 @@ public class CompanyService {
             .build()).collect(Collectors.toList());
     }
 
-    public List<CompanyDto> search(CompanySearchCriteria companySearchCriteria) {
+    public List<CompanyDto> search(SearchCriteria searchCriteria) {
 
-        Specification<Company> spec = Specification.where(CompanySpecification.search(companySearchCriteria));
+        Specification<Company> spec = Specification.where(CompanySpecification.search(searchCriteria));
 
         return companyRepository.findAll(spec).stream().map(x -> 
             CompanyDto.builder()

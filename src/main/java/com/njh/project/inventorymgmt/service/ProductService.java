@@ -4,13 +4,16 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.njh.project.inventorymgmt.dto.ProductDto;
+import com.njh.project.inventorymgmt.dto.SearchCriteria;
 import com.njh.project.inventorymgmt.entity.Product;
 import com.njh.project.inventorymgmt.exception.NotFoundException;
 import com.njh.project.inventorymgmt.repository.ProductRepository;
+import com.njh.project.inventorymgmt.repository.ProductSpecification;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -39,9 +42,26 @@ public class ProductService {
             .build()).collect(Collectors.toList());
     }
 
+    public List<ProductDto> search(SearchCriteria searchCriteria) {
+
+        Specification<Product> spec = Specification.where(ProductSpecification.search(searchCriteria));
+
+        return productRepository.findAll(spec).stream().map(x -> 
+            ProductDto.builder()
+                .seq(x.getSeq())
+                .name(x.getName())
+                .code(x.getCode())
+                .amount(x.getAmount())
+                .price(x.getPrice())
+                .createdDate(x.getCreatedDate())
+                .updatedDate(x.getUpdatedDate())
+            .build()).collect(Collectors.toList());
+    }
+
     public Boolean save(Long seq, String name, String code, Long amount, Long price) {
 
         try {
+
             if (seq > 0) {
 
                 Optional<Product> product = productRepository.findById(seq);
@@ -66,6 +86,18 @@ public class ProductService {
         } catch (Exception e) {
             log.error("Occured something wrong...");
             return false;
+        }
+
+        return true;
+    }
+
+    @Transactional
+    public Boolean delete(Long[] seqs) throws NotFoundException {
+
+        try {
+            productRepository.deleteBySeqIn(seqs);    
+        } catch (Exception e) {
+            throw new NotFoundException(e.getMessage());
         }
 
         return true;

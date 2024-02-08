@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class CompanySearchCriteria {
+public class SearchCriteria {
 
     private String type;
     private String keyword;

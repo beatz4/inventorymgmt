@@ -231,7 +231,47 @@ let columns = [
 
             view.save(items);
         });
+
+        $('#btnNew').click(function() {
+            initializePopup();
+        });
+
+        $('#btnDelete').click(function() {
+            view.delete();
+        });
+
+        $('#btnSearch').click(function() {
+            const type = $('#type').val();
+            const keyword = $('#keyword').val();
+
+            const date_range = $('#datepicker_range').val();
+            const date = date_range.split('-');
+
+            const start = date.length === 2 ? new Date(date[0]) : '';
+            const end = date.length === 2 ? new Date(date[1]) : '';
+
+            let data = {
+                type: type,
+                keyword: keyword,
+                start_date: start,
+                end_date: end
+            };
+
+            let items = {
+                items: JSON.stringify(data)
+            };
+
+            view.search(items);
+        });
     });
+
+    function initializePopup() {
+        $('#product_seq').val('');
+        $('#product_name').val('');
+        $('#product_code').val('');
+        $('#product_amount').val('');
+        $('#product_price').val('');
+    }
 
     function validateData() {
         const seq = $('#product_seq').val();

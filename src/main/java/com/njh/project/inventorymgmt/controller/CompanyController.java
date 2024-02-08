@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.njh.project.inventorymgmt.dto.AddressDto;
 import com.njh.project.inventorymgmt.dto.CompanyDto;
-import com.njh.project.inventorymgmt.dto.CompanySearchCriteria;
+import com.njh.project.inventorymgmt.dto.SearchCriteria;
 import com.njh.project.inventorymgmt.exception.NotFoundException;
 import com.njh.project.inventorymgmt.service.CompanyService;
 
@@ -40,10 +40,10 @@ public class CompanyController {
         String startDate = jsonObject.get("start_date").toString();
         String endDate = jsonObject.get("end_date").toString();
 
-        CompanySearchCriteria companySearchCriteria = new CompanySearchCriteria();
+        SearchCriteria searchCriteria = new SearchCriteria();
 
-        companySearchCriteria.setSearchCriteria(type, keyword, startDate, endDate);
-        return companyService.search(companySearchCriteria);
+        searchCriteria.setSearchCriteria(type, keyword, startDate, endDate);
+        return companyService.search(searchCriteria);
     }
 
     @PostMapping("/companymgmt/save")

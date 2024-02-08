@@ -11,7 +11,7 @@ class ProductMgmt {
 
         this.grid = this.initGrid();
         this.loadData(); 
-        // this.addGridEvent();
+        this.addGridEvent();
     } 
 
     initGrid() {
@@ -39,6 +39,13 @@ class ProductMgmt {
     addGridEvent() {
 
         this.grid.on('dblclick', () => {
+            const selectedData = this.grid.getRow(this.grid.getFocusedCell().rowKey);
+
+            $('#popupAddProduct').modal('toggle');
+            $('#product_name').val(selectedData.name);
+            $('#product_code').val(selectedData.code);
+            $('#product_amount').val(selectedData.amount);
+            $('#product_price').val(selectedData.price);
         });
     }
 
@@ -51,9 +58,7 @@ class ProductMgmt {
             url: "/productmgmt/list",
             data: param,
             success: function(res) {
-                self.grid.resetData(
-                    res
-                );
+                self.grid.resetData(res);
             },
             error: function(XMLHttpRequest, textStatus, errorThrown){
                 alert("데이터 로드에 실패하였습니다.");
@@ -76,6 +81,47 @@ class ProductMgmt {
             },
             error: function(XMLHttpRequest, textStatus, errorThrown){
                 alert("데이터 저장에 실패하였습니다.");
+            }
+        });
+    }
+
+    delete() {
+        let self = this;
+
+        const seqs = self.grid.getCheckedRows().map(x => x.seq);
+
+        if (seqs.length === 0) {
+            alert("삭제할 상품을 선택해주십시오.");
+            return;
+        }
+
+        if( confirm("삭제하시겠습니까?") ) {
+            $.ajax({
+                type: "POST",
+                url: "/productmgmt/delete?seqs=" + seqs,
+                success: function(res) {
+                    alert("삭제되었습니다.");
+                    self.loadData();
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown){
+                    alert("삭제 실패하였습니다.");
+                }
+            });
+        }
+    }
+
+    search(data) {
+        let self = this;
+
+        $.ajax({
+            type: "GET",
+            url: "/productmgmt/list/search",
+            data: data,
+            success: function(res) {
+                self.grid.resetData(res);
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown){
+                alert("검색 실패하였습니다.");
             }
         });
     }

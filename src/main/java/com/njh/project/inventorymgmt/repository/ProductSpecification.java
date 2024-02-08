@@ -7,13 +7,13 @@ import java.util.List;
 import org.springframework.data.jpa.domain.Specification;
 
 import com.njh.project.inventorymgmt.dto.SearchCriteria;
-import com.njh.project.inventorymgmt.entity.Company;
+import com.njh.project.inventorymgmt.entity.Product;
 
 import jakarta.persistence.criteria.Predicate;
 
-public class CompanySpecification {
+public class ProductSpecification {
 
-    public static Specification<Company> search(SearchCriteria criteria) {
+    public static Specification<Product> search(SearchCriteria criteria) {
 
         return (root, query, builder) -> {
 
@@ -35,20 +35,16 @@ public class CompanySpecification {
 
             // 조건 검색
             switch (criteria.getType()) {
-                case "company_name":
+                case "product_name":
                     predicates.add(builder.like(root.get("name"), "%" + criteria.getKeyword() + "%"));
                 break;
-                case "company_phone":
-                    predicates.add(builder.like(root.get("phone"), "%" + criteria.getKeyword() + "%"));
-                break;
-                case "company_email":
-                    predicates.add(builder.like(root.get("email"), "%" + criteria.getKeyword() + "%"));
+                case "product_code":
+                    predicates.add(builder.like(root.get("code"), "%" + criteria.getKeyword() + "%"));
                 break;
                 default:
                     predicates.add(builder.or(
                         builder.like(root.get("name"), "%" + criteria.getKeyword() + "%"),
-                        builder.like(root.get("phone"), "%" + criteria.getKeyword() + "%"),
-                        builder.like(root.get("email"), "%" + criteria.getKeyword() + "%")
+                        builder.like(root.get("code"), "%" + criteria.getKeyword() + "%")
                     ));
                 break;
             }
