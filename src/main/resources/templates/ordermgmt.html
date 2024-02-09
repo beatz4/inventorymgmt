@@ -5,24 +5,189 @@
     <meta charset="UTF-8">
     <!-- css -->
     <link th:href="@{/lib/tui-grid.css}" rel="stylesheet" />
+    <link th:href="@{/lib/bootstrap.min.css}" rel="stylesheet" />
+    <link th:href="@{/lib/jquery-ui.css}" rel="stylesheet" />
+    <link th:href="@{/lib/daterangepicker.css}" rel="stylesheet" />
+    <link th:href="@{/css/layout.css}" rel="stylesheet" />
 
     <!-- js -->
     <script type="text/javascript" th:src="@{/lib/tui-grid.js}"></script>
     <script type="text/javascript" th:src="@{/lib/jquery-3.7.1.min.js}"></script>
+    <script type="text/javascript" th:src="@{/lib/jquery-ui.js}"></script>
+    <script type="text/javascript" th:src="@{/lib/bootstrap.bundle.min.js}"></script>
+    <script type="text/javascript" th:src="@{/lib/moment.min.js}"></script>
+    <script type="text/javascript" th:src="@{/lib/daterangepicker.min.js}"></script>
+
     <script type="text/javascript" th:src="@{/js/ordermgmt.js}"></script>
+    <script type="text/javascript" th:src="@{/js/regex.js}"></script>
 
     <title>Order Management</title>
 </head>
 <body>
     <div class="container">
-        <div class="container_header">
 
-        </div>
+        <header class="py-5">
+            <div class="container px-lg-5">
+                <div class="p-4 p-lg-5 bg-light rounded-3 text-center">
+                    <div class="m-4 m-lg-5">
+                        <h1 class="display-5 fw-bold">주문관리 시스템</h1>
+                    </div>
+                </div>
+            </div>
+        </header>
+
 
         <div class="container_content">
-            <div id="grid"></div>
+            <div class="search_area">
+
+                <!--begin::Row-->
+                <div class="row g-12">
+
+                    <!-- 검색 타입 -->
+                    <div class="col-lg-3">
+                        <label class="fs-6 form-label fw-bold text-gray-900">검색 타입</label>                    
+                        <select id="type" class="form-select form-select-solid" data-control="select2" data-placeholder="In Progress" data-hide-search="true">                    
+                            <option value="all">전체</option>
+                            <option value="order_company" selected>주문업체명</option>
+                            <option value="order_product">주문상품명</option>
+                        </select>      
+                    </div>
+
+                    <!-- 키워드 -->
+                    <div class="col-lg-3">
+                        <label class="fs-6 form-label fw-bold text-gray-900">키워드</label>
+                        <input id="keyword" type="text" class="form-control form-control form-control-solid">
+                    </div>
+
+                    <!-- 기간 검색 -->
+                    <div class="col-lg-4">
+                        <label class="fs-6 form-label fw-bold text-gray-900">기간선택</label>
+                        <input id="datepicker_range" style="background-color: white !important" type="text" class="form-control form-control form-control-solid datepicker" autocomplete="off" readonly>
+                    </div>
+                    <div class="col-lg-2">
+                        <button id="btnSearch" type="submit" class="btn btn-primary" style="margin-top: 31px; float: right;">Search</button>
+                    </div>
+                </div>
+            </div>
+
+            <div style="float: left; padding-top: 10px;">
+                <button id="btnNew" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#popupAddOrder">새 주문</button>
+                <button id="btnDelete" class="btn btn-info btn-sm">주문 삭제</button>
+            </div>
+
+            <div id="grid" style="margin-top: 50px;"></div>
         </div>
     </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="popupAddOrder" aria-hidden="true" aria-labelledby="popupAddOrderLabel" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="popupAddOrderLabel">주문 정보</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <!-- <h5 class="modal-title" id="exampleModalToggleLabel">Modal 1</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+        </div>
+        <div class="modal-body">
+            <input type="hidden" id="order_seq">
+            <div class="mb-3">
+                <label for="order_name" class="col-form-label">주문업체:</label><br>
+                <input type="text" id="order_name" style="width: 80% !important;" class="margin-top" placeholder="주문업체">
+                <button class="btn btn-primary" data-bs-target="#popupFindCompany" data-bs-toggle="modal" data-bs-dismiss="modal">업체검색</button>
+                <!-- <button class="btn btn-primary" data-bs-target="#popupFindCompany" data-bs-toggle="modal" data-bs-dismiss="modal">업체검색</button> -->
+                
+                <!-- <input type="button" class="margin-top" onclick="openFindCompany();" value="업체검색"><br> -->
+            </div>
+            <div class="mb-3">
+                <label for="order_product" class="col-form-label">주문상품:</label><br>
+                <input type="text" id="order_product" style="width: 80% !important;" class="margin-top" placeholder="주문상품">
+                <input type="button" class="margin-top" onclick="openFindProduct();" value="상품검색"><br>
+            </div>
+            <div class="mb-3">
+                <label for="order_amount" class="col-form-label">수량:</label>
+                <input type="text" class="form-control" id="order_amount">
+            </div>
+            <div class="mb-3">
+                <label for="product_price" class="col-form-label">단가:</label>
+                <input type="text" class="form-control" id="product_price" readonly>
+            </div>
+            <div class="mb-3">
+                <label for="order_total" class="col-form-label">합계:</label>
+                <input type="text" class="form-control" id="order_total" readonly>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+            <button type="button" class="btn btn-primary" id="btnAdd">저장</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- 업체선택 -->
+  <div class="modal fade" id="popupFindCompany" aria-hidden="true" aria-labelledby="popupFindCompanyLabel" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="popupFindCompanyLabel">업체 검색</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <!-- <h5 class="modal-title" id="popupFindCompanyLabel">Modal 2</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+        </div>
+        <div class="modal-body">
+            <div class="row g-12">
+                <div class="col-lg-3">
+                    <label class="fs-6 form-label fw-bold text-gray-900">검색 타입</label>                    
+                    <select id="type" class="form-select form-select-solid" data-control="select2" data-placeholder="In Progress" data-hide-search="true">                    
+                        <option value="all">전체</option>
+                        <option value="order_company" selected>주문업체명</option>
+                        <option value="order_product">주문상품명</option>
+                    </select>      
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+            <button class="btn btn-primary" data-bs-target="#popupAddOrder" data-bs-toggle="modal" data-bs-dismiss="modal">Back to first</button>
+            <!-- <button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal" data-bs-dismiss="modal">Back to first</button> -->
+          <!-- <button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal" data-bs-dismiss="modal">Back to first</button> -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 업체검색 -->
+  <!-- <div class="modal fade" id="popupFindCompany" tabindex="-1" aria-labelledby="popupFindCompanyLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="popupFindCompanyLabel">업체 검색</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            
+            <div class="modal-body">
+
+                <div class="row g-12">
+
+                    <div class="col-lg-3">
+                        <label class="fs-6 form-label fw-bold text-gray-900">검색 타입</label>                    
+                        <select id="type" class="form-select form-select-solid" data-control="select2" data-placeholder="In Progress" data-hide-search="true">                    
+                            <option value="all">전체</option>
+                            <option value="order_company" selected>주문업체명</option>
+                            <option value="order_product">주문상품명</option>
+                        </select>      
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                <button type="button" class="btn btn-primary" id="btnAdd">저장</button>
+            </div>
+        </div>
+    </div>
+  </div> -->
 </body>
 </html>
 
@@ -35,5 +200,13 @@
     $(function() {
 
     });
+
+    function openFindCompany() {
+        $('#popupFindCompany').modal('toggle');
+    }
+
+    function openFindProduct() {
+
+    }
 
 </script>
