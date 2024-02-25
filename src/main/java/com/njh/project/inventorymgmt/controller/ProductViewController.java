@@ -8,6 +8,6 @@ public class ProductViewController {
 
     @GetMapping("/productmgmt")
     public String getInventoryView() {
-        return "/productmgmt";
+        return "productmgmt";
     }
 }

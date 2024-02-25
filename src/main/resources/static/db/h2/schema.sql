@@ -60,3 +60,22 @@ CREATE TABLE TBL_PRODUCT_MGMT
 -- 테스트 데이터
 INSERT INTO TBL_PRODUCT_MGMT (`name`, `code`, `amount`, price) 
     VALUES ('test product', 'PTEST0001', '5', '30000');
+
+-- 주문
+CREATE TABLE TBL_ORDER_MGMT
+(
+    `id`      BIGINT          NOT NULL AUTO_INCREMENT,
+    `product_id`    BIGINT    NOT NULL,
+    `company_id`    BIGINT    NOT NULL,
+    `amount`  BIGINT          NOT NULL,
+    `total_price`   BIGINT          NOT NULL,
+    `created_date` TIMESTAMP DEFAULT NOW(),
+    `updated_date` TIMESTAMP DEFAULT NOW(),
+    CONSTRAINT TBL_ORDER_MGMT_PK PRIMARY KEY (id),
+    CONSTRAINT TBL_ORDER_MGMT_FK1 FOREIGN KEY (product_id) REFERENCES TBL_PRODUCT_MGMT(id),
+    CONSTRAINT TBL_ORDER_MGMT_FK2 FOREIGN KEY (company_id) REFERENCES TBL_COMPANY_MGMT(id)
+);
+
+-- 테스트 데이터
+INSERT INTO TBL_ORDER_MGMT (`product_id`, `company_id`, `amount`, total_price) 
+    VALUES (1, 1, 3, 30000);
